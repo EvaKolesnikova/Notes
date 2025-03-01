@@ -1,51 +1,125 @@
 body {
-    font-family: tahoma, serif;
-    background-color: rgba(239, 211, 244, 0.46);;
+    font-family: 'Arial', sans-serif;
+    background-color: rgba(247, 190, 255, 0.46);;
     margin: 0;
     background-repeat: no-repeat;
     background-size: cover;
+    color: #333;
 }
 
-app {
+#app {
+    margin: 50px;
     display: flex;
-    justify-content: space-between;
-    width: 100%;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 30px;
 }
 
 .column {
-    width: 30%;
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 300px;
+    border-radius: 10px;
+    background-color: white;
+    border: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.column:hover {
+    transform: translateY(-5px);
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #000;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-align: center;
 }
 
 .card {
+    background-color: #fff;
     margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 .card h3 {
     margin: 0;
     font-size: 18px;
+    font-weight: bold;
+    color: #333;
 }
 
 .card ul {
     list-style-type: none;
     padding: 0;
+    margin: 10px 0;
 }
 
 .card ul li {
-    margin: 5px 0;
+    margin: 8px 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
 }
 
 .card input {
     margin-right: 10px;
+    accent-color: #4caf50; /* Зеленый цвет для чекбоксов */
+    transform: scale(1.2); /* Увеличим размер чекбоксов */
 }
 
 .card p {
     font-size: 12px;
-    color: #555;
+    color: #888;
+    margin-top: 10px;
+    text-align: center;
+}
+
+button {
+    background-color: #33ff3d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+input[type="text"] {
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 14px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #4caf50;
+}
+
+.columns-container {
+    display: flex;
+    flex-direction: row;
+    gap: 210px;
 }

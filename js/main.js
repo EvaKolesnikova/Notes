@@ -2,6 +2,10 @@ const app = new Vue({
     el: '#app',
     data() {
         return {
+            newCard: {
+                title: '',
+                list: ['', '', '', ''],
+            },
             columns: [
                 {cards: JSON.parse(localStorage.getItem('column1')) || []},
                 {cards: JSON.parse(localStorage.getItem('column2')) || []},
@@ -20,6 +24,17 @@ const app = new Vue({
             localStorage.setItem('column1', JSON.stringify(this.columns[0].cards));
             localStorage.setItem('column2', JSON.stringify(this.columns[1].cards));
             localStorage.setItem('column3', JSON.stringify(this.columns[2].cards));
+        },
+        addNewCard() {
+            if (this.newCard.title && this.newCard.list.length > 0) {
+                const newCard = {
+                    title: this.newCard.title,
+                    list: this.newCard.list.map(item => ({ text: item, done: false })),
+                };
+                this.columns[0].cards.push(newCard);
+                this.newCard = { title: '', list: ['', '', '', ''] };
+                this.saveData();
+            }
         },
     },
     components: {
@@ -90,13 +105,31 @@ const app = new Vue({
     },
     template: `
     <div id="app">
-      <Column
-        v-for="(column, index) in columns"
-        :key="index"
-        :columnNumber="index + 1"
-        :cards="column.cards"
-        :moveCard="moveCard"
-      />
+        <div>
+            <h2>Создай новую заметку</h2>
+            <form @submit.prevent="addNewCard">
+              <div>
+                <label for="title">Title:</label>
+                <input v-model="newCard.title" id="title" type="text" required />
+              </div>
+              <div>
+                <label for="list">Items (min 3, max 5):</label>
+                <div v-for="(item, index) in newCard.list" :key="index">
+                  <input v-model="newCard.list[index]" type="text" :placeholder="'Item ' + (index + 1)" required />
+                </div>
+              </div>
+              <button type="submit">Add Note</button>
+            </form>
+          </div>
+        <div class="columns-container">
+            <Column
+            v-for="(column, index) in columns"
+            :key="index"
+            :columnNumber="index + 1"
+            :cards="column.cards"
+            :moveCard="moveCard"
+            />
+        </div>
     </div>
   `,
 });
