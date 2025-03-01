@@ -1,0 +1,51 @@
+body {
+    font-family: tahoma, serif;
+    background-color: rgba(239, 211, 244, 0.46);;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+app {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.column {
+    width: 30%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.card {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.card ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.card ul li {
+    margin: 5px 0;
+}
+
+.card input {
+    margin-right: 10px;
+}
+
+.card p {
+    font-size: 12px;
+    color: #555;
+}
