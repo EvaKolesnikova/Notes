@@ -2,9 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки</title>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-
+<h1>Заметки</h1>
+<div class="container"></div>
+<script src="js/main.js"></script>
+<div class="card-form-container">
+    <form id="addCardForm">
+        <h2>Создать новую карточку</h2>
+        <label for="cardTitle">Заголовок:</label>
+        <input type="text" id="cardTitle" required />
+        <button type="submit">Добавить карточку</button>
+    </form>
+</div>
 </body>
 </html>
