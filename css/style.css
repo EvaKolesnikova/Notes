@@ -1,10 +1,10 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: beige;
+    background-color: rgba(232, 140, 239, 0.65);
     margin: 0;
     background-repeat: no-repeat;
     background-size: cover;
-    color: #333;
+    color: #81347a;
 }
 
 #app {
@@ -20,21 +20,16 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 300px;
+    width: 400px;
     border-radius: 10px;
-    background-color: white;
-    border: black;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.column:hover {
-    transform: translateY(-5px);
+    background-color: #ffe7fe;
+    border: #830074;
+    box-shadow: 0 4px 6px rgb(248, 125, 236);
 }
 
 h2 {
     font-size: 1.5em;
-    color: #000;
+    color: #830074;
     margin-bottom: 15px;
     font-weight: bold;
     text-align: center;
@@ -42,26 +37,24 @@ h2 {
 
 .card {
     width: 250px;
-    background-color: #fff;
+    background-color: #ffffff;
     margin-bottom: 15px;
     padding: 20px;
     border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #ecb9e7;
+    box-shadow: 0 4px 6px rgb(236, 185, 231);
 }
 
 
 .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 10px rgb(248, 125, 236);
 }
 
 .card h3 {
     margin: 0;
     font-size: 18px;
     font-weight: bold;
-    color: #333;
+    color: rgba(232, 140, 239, 0.65);
 }
 
 .card ul {
@@ -78,37 +71,36 @@ h2 {
 }
 
 .card input {
+    color: #d363ff;
     margin-right: 10px;
-    accent-color: #6c63ff;
-    transform: scale(1.2);
+    accent-color: #d363ff;
 }
 
 .card p {
     font-size: 12px;
-    color: #888;
+    color: #d363ff;
     margin-top: 10px;
     text-align: center;
 }
 
 button {
-    color: white;
+    color: #81347a;
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s ease;
 }
 
 button:disabled {
-    background-color: #ccc;
+    background-color: rgb(248, 125, 236);
     cursor: not-allowed;
 }
 
 input[type="text"] {
     padding: 8px;
     margin: 10px 0;
-    border: 1px solid #ddd;
+    border: 1px solid #ecb9e7;
     border-radius: 5px;
     width: 100%;
     font-size: 14px;
@@ -116,22 +108,22 @@ input[type="text"] {
 
 input[type="text"]:focus {
     outline: none;
-    border-color: #6c63ff;
+    border-color: #ec5dde;
 }
 
 .columns-container {
     display: flex;
     flex-direction: row;
-    gap: 210px;
+    gap: 20px;
 }
 
 form {
     margin-bottom: 30px;
     padding: 20px;
-    background-color: #fff;
+    background-color: #ffe7fe;
     border-radius: 8px;
-    border: 1px solid #ccc;
-    width: 100%;
+    border: 1px solid #ecb9e7;
+    width: 350px;
     max-width: 400px;
     box-sizing: border-box;
 }
@@ -153,19 +145,19 @@ form input {
     padding: 10px;
     margin: 5px 0;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid #ecb9e7;
     box-sizing: border-box;
     font-size: 14px;
 }
 
 form input:focus {
     outline: none;
-    border-color: #6c63ff;
+    border-color: #ec5dde;
 }
 
 form button {
     padding: 12px 20px;
-    background-color: blueviolet;
+    background-color: #ec5dde;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -176,11 +168,11 @@ form button {
 }
 
 form button:hover {
-    background-color: #6c63ff;
+    background-color: #d83dca;
 }
 
 form button:disabled {
-    background-color: #ccc;
+    background-color: #a3a3a3;
     cursor: not-allowed;
 }
 
