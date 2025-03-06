@@ -1,3 +1,70 @@
+const Card = {
+    props: {
+        title: String,
+        list: Array,
+        column: Number,
+        index: Number,
+        moveCard: Function,
+    },
+    data() {
+        return {
+            completed: 0,
+            completedAt: null,
+        };
+    },
+    methods: {
+        checkItem(index) {
+            const completedItems = this.list.filter(item => item.done).length;
+            this.completed = Math.floor((completedItems / this.list.length) * 100);
+
+            if (this.completed === 100) {
+                this.completedAt = new Date().toLocaleString();
+            }
+
+            if (this.column === 1 && this.completed > 50) {
+                this.moveCard({ column: this.column, index: this.index }, 2);
+            } else if (this.column === 2 && this.completed === 100) {
+                this.moveCard({ column: this.column, index: this.index }, 3);
+            }
+        },
+    },
+    template: `
+        <div class="card">
+            <h3>{{ title }}</h3>
+            <ul>
+                <li v-for="(item, index) in list" :key="index">
+                  <input type="checkbox" v-model="item.done" @change="checkItem(index)" />
+                  {{ item.text }}
+                </li>
+            </ul>
+            <p v-if="completed === 100">Completed at: {{ completedAt }}</p>
+        </div>
+    `,
+};
+
+const Column = {
+    props: {
+        columnNumber: Number,
+        cards: Array,
+        moveCard: Function,
+    },
+    components: { Card },
+    template: `
+        <div class="column">
+            <h2>Column {{ columnNumber }}</h2>
+            <div v-for="(card, index) in cards" :key="index">
+                <Card
+                  :title="card.title"
+                  :list="card.list"
+                  :column="columnNumber"
+                  :index="index"
+                  :moveCard="moveCard"
+                />
+            </div>
+        </div>
+    `,
+};
+
 const app = new Vue({
     el: '#app',
     data() {
@@ -7,9 +74,9 @@ const app = new Vue({
                 list: ['', '', '', ''],
             },
             columns: [
-                {cards: JSON.parse(localStorage.getItem('column1')) || []},
-                {cards: JSON.parse(localStorage.getItem('column2')) || []},
-                {cards: JSON.parse(localStorage.getItem('column3')) || []},
+                { cards: JSON.parse(localStorage.getItem('column1')) || [] },
+                { cards: JSON.parse(localStorage.getItem('column2')) || [] },
+                { cards: JSON.parse(localStorage.getItem('column3')) || [] },
             ],
             blockFirstColumn: false,
         };
@@ -26,87 +93,29 @@ const app = new Vue({
             localStorage.setItem('column3', JSON.stringify(this.columns[2].cards));
         },
         addNewCard() {
-            if (this.newCard.title && this.newCard.list.length > 0) {
+            if (this.newCard.title.trim() && this.newCard.list.every(item => item.trim())) {
                 const newCard = {
                     title: this.newCard.title,
-                    list: this.newCard.list.map(item => ({ text: item, done: false })),
+                    list: this.newCard.list.map(text => ({ text, done: false })),
                 };
-                this.columns[0].cards.push(newCard);
-                this.newCard = { title: '', list: ['', '', '', ''] };
+                if (this.columns[0].cards.length < 3) {
+                    this.columns[0].cards.push(newCard);
+                    console.log('New card added:', newCard);
+                } else {
+                    alert('Первый столбец может содержать не более 3 карточек!');
+                }
                 this.saveData();
+                this.newCard = { title: '', list: ['', '', '', ''] };
+            } else {
+                alert('Введите заголовок и минимум 3 пункта!');
             }
         },
     },
-    components: {
-        Card: {
-            props: {
-                title: String,
-                list: Array,
-                column: Number,
-                index: Number,
-                moveCard: Function,
-            },
-            data() {
-                return {
-                    completed: 0,
-                    completedAt: null,
-                };
-            },
-            methods: {
-                checkItem(index) {
-                    const completedItems = this.list.filter(item => item.done).length;
-                    this.completed = Math.floor((completedItems / this.list.length) * 100);
-
-                    if (this.completed === 100) {
-                        this.completedAt = new Date().toLocaleString();
-                    }
-
-                    if (this.column === 1 && this.completed > 50) {
-                        this.moveCard({ column: this.column, index: this.index }, 2);
-                    } else if (this.column === 2 && this.completed === 100) {
-                        this.moveCard({ column: this.column, index: this.index }, 3);
-                    }
-                },
-            },
-            template: `
-                <div class="card">
-                    <h3>{{ title }}</h3>
-                    <ul>
-                        <li v-for="(item, index) in list" :key="index">
-                          <input type="checkbox" v-model="item.done" @change="checkItem(index)" />
-                          {{ item.text }}
-                        </li>
-                    </ul>
-                    <p v-if="completed === 100">Completed at: {{ completedAt }}</p>
-                </div>
-               `,
-        },
-        Column: {
-            props: {
-                columnNumber: Number,
-                cards: Array,
-                moveCard: Function,
-            },
-            template: `
-                <div class="column">
-                    <h2>Column {{ columnNumber }}</h2>
-                    <div v-for="(card, index) in cards" :key="index">
-                        <Card
-                          :title="card.title"
-                          :list="card.list"
-                          :column="columnNumber"
-                          :index="index"
-                          :moveCard="moveCard"
-                        />
-                    </div>
-                </div>
-            `,
-        },
-    },
+    components: { Column },
     template: `
     <div id="app">
         <div>
-            <h2>Создай новую заметку</h2>
+            <h2>Создать новую заметку</h2>
             <form @submit.prevent="addNewCard">
               <div>
                 <label for="title">Title:</label>
@@ -120,7 +129,7 @@ const app = new Vue({
               </div>
               <button type="submit">Add Note</button>
             </form>
-          </div>
+        </div>
         <div class="columns-container">
             <Column
             v-for="(column, index) in columns"
