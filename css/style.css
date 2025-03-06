@@ -176,4 +176,30 @@ form button:disabled {
     cursor: not-allowed;
 }
 
+#app {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
+button {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #ec5dde;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #d83dca;
+}
+
+button:disabled {
+    background-color: #a3a3a3;
+    cursor: not-allowed;
+}

@@ -9,6 +9,11 @@ const Card = {
         updateCard: Function,
         totalCardsInSecondColumn: Number,
     },
+    data() {
+        return {
+            draggedItemIndex: null,
+        };
+    },
     computed: {
         completed() {
             const completedItems = this.list.filter(item => item.done).length;
@@ -25,7 +30,6 @@ const Card = {
             const completed = Math.floor((completedItems / this.list.length) * 100);
             if (completed === 100 && !this.completedAt) {
                 const completedTime = new Date().toLocaleString();
-                console.log('Задача завершена! Устанавливаем время:', completedTime);
                 this.updateCard(this.index, this.column, { completedAt: completedTime });
             }
 
@@ -36,14 +40,53 @@ const Card = {
             }
             this.$root.checkBlockFirstColumn();
         },
+        // Добавляем методы для drag-and-drop внутри списка
+        dragStartItem(event, index) {
+            this.draggedItemIndex = index;
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', index);
+        },
+        dragOverItem(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+            return false;
+        },
+        dropItem(event) {
+            const targetIndex = event.target.closest('li').dataset.index;
+            if (this.draggedItemIndex !== null && targetIndex !== null) {
+                const newIndex = parseInt(targetIndex);
+                const movedItem = this.list.splice(this.draggedItemIndex, 1)[0];
+                this.list.splice(newIndex, 0, movedItem);
+                this.updateCard(this.index, this.column, { list: this.list }); // Обновляем данные
+            }
+            this.draggedItemIndex = null;
+            return false;
+        },
+        dragEndItem() {
+            this.draggedItemIndex = null;
+        }
     },
     template: `
-        <div class="card">
+        <div class="card" @dragover.stop @drop.stop>
             <h3>{{ title }}</h3>
             <ul>
-                <li v-for="(item, index) in list" :key="index">
-                  <input type="checkbox" v-model="item.done" @change="checkItem(index)" :disabled="item.done || isBlocked"/>
-                  {{ item.text }}
+                <li 
+                    v-for="(item, index) in list" 
+                    :key="index" 
+                    :data-index="index"
+                    draggable="true"
+                    @dragstart="(e) => dragStartItem(e, index)"
+                    @dragover="dragOverItem"
+                    @drop="dropItem"
+                    @dragend="dragEndItem"
+                >
+                    <input 
+                        type="checkbox" 
+                        v-model="item.done" 
+                        @change="checkItem(index)" 
+                        :disabled="item.done || isBlocked"
+                    />
+                    {{ item.text }}
                 </li>
             </ul>
             <p v-if="completed === 100">Completed at: {{ completedAt }}</p>
@@ -119,6 +162,17 @@ const app = new Vue({
                 this.blockFirstColumn = false;
             }
         },
+        moveAllCardsToLastColumn() {
+            this.columns.forEach((column, columnIndex) => {
+                if (columnIndex !== 2) {
+                    column.cards.forEach(card => {
+                        this.columns[2].cards.push(card);
+                    });
+                    column.cards = [];
+                }
+            });
+            this.saveData();
+        },
         saveData() {
             localStorage.setItem('column1', JSON.stringify(this.columns[0].cards));
             localStorage.setItem('column2', JSON.stringify(this.columns[1].cards));
@@ -156,6 +210,18 @@ const app = new Vue({
                 alert('Введите заголовок и минимум 3 пункта!');
             }
         },
+        deleteAllCards() {
+            if (confirm('Вы уверены, что хотите удалить все \n' +
+                'заметки? Это действие нельзя отменить.')) {
+                this.columns = [
+                    { cards: [] },
+                    { cards: [] },
+                    { cards: [] },
+                ];
+                this.saveData();
+                alert('Все заметки удалены.');
+            }
+        },
     },
     components: { Column },
     template: `
@@ -178,17 +244,25 @@ const app = new Vue({
                 <button type="submit" :disabled="blockFirstColumn">Add Note</button>
             </form>
         </div>
+        <div>
+            <button @click="moveAllCardsToLastColumn" :disabled="blockFirstColumn">
+                Перенести все карточки в последний столбец
+            </button>
+            <button @click="deleteAllCards">
+                Удалить все заметки
+            </button>
+        </div>
         <div class="columns-container">
             <Column
-            v-for="(column, index) in columns"
-            :key="index"
-            :columnNumber="index + 1"
-            :cards="column.cards"
-            :moveCard="moveCard"
-            :updateCard="updateCard"
-            :totalCardsInSecondColumn="columns[1].cards.length"
+                v-for="(column, index) in columns"
+                :key="index"
+                :columnNumber="index + 1"
+                :cards="column.cards"
+                :moveCard="moveCard"
+                :updateCard="updateCard"
+                :totalCardsInSecondColumn="columns[1].cards.length"
             />
         </div>
     </div>
-  `,
+    `,
 });
